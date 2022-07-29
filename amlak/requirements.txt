@@ -1,0 +1,10 @@
+django
+pyyaml
+uritemplate
+drf-spectacular
+djangorestframework
+djangorestframework-simplejwt
+mysqlclient 
+python-decouple
+uritemplate
+drf-spectacular
