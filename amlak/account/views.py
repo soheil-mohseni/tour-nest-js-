@@ -29,8 +29,11 @@ def submit(request):
 			except User.DoesNotExist: 
 
 				user = User.objects.create_user(request.POST['phone_number'],request.POST['password1'] )
-				auth.login(request,user)
-				return render(request,'account/dist/index.html', )
+				request.session['password'] = {
+				'password': request.POST['password1'],
+						}
+				#auth.login(request,user)
+				return redirect('account:user_login')
 				
 				
  
@@ -67,36 +70,36 @@ class UserRegisterView(View):
 
 class UserRegisterVerifyCodeView(View):
 	current_time = datetime.datetime.now()
-	n = 2
+	n = 3
 	future_time = current_time + timedelta(minutes = n)
 
 	def get(self, request):
 		#form = self.form_class
+		print(datetime.datetime.now())
 		return render(request, 'account/verify.html',)
 
 	def post(self, request):
 		user_session = request.session['usercode_expire']
 		code_instance = OtpCode.objects.get(phone_number = user_session['phone_number'])
-		#form = self.form_class(request.POST)
-		#if form.is_valid():
-	#	cd = form.cleaned_data
-		if request.POST['verify_code'] == code_instance.code:
+		code = str(code_instance.code)
+		password_session = request.session['password']
+		if request.POST['verify_code'] == code:
 			if self.future_time > datetime.datetime.now():
 				code_instance.delete()
-				messages.success(request, 'you have loged in.', 'success')
+				user = authenticate(phone_number= user_session['phone_number'], password= password_session["password"])
 				auth.login(request,user)
+				messages.success(request, 'you have loged in.', 'success')
 				return redirect('account:home')
-
-		else:
-			messages.error(request, 'this code is wrong', 'danger')
-			return redirect('account:verify_code')
+			else:
+				messages.error(request, 'this code is wrong', 'danger')
+				return redirect('account:verify_code')
 		#return redirect('home:home)
 
 
 
 
 def home(request):
-	return render(request, 'account/index.html', {'form':form})
+	return render(request, 'account/index.html',)
 
 
 # signup

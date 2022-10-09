@@ -1,0 +1,11 @@
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ amlak     | Superuser, Create DB                                       | {}
+ arman     | Superuser, Create DB                                       | {}
+ divar     | Superuser, Create DB                                       | {}
+ divari    |                                                            | {}
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ universe  | Superuser, Create DB                                       | {}
+ viraset   | Superuser, Create role, Create DB                          | {}
+

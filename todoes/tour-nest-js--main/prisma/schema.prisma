@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+//      #######   USER   #########
+
+
+enum UserType {
+  BUYER
+  REALTOR
+  ADMIN
+}
+
+model User {
+  id                            Int  @id @default(autoincrement())
+  name                          String
+  phone                         String
+  email                         String @unique
+  password                      String
+  created_at                    DateTime @default(now())
+  updated_at                    DateTime @updatedAt
+  user_type                     UserType
+
+  homes                         Home[]
+
+}
+
+
+//      #######   HOME   #########
+
+
+
+model Home {
+  id                            Int  @id @default(autoincrement())
+  title                         String
+  created_at                    DateTime @default(now())
+  updated_at                    DateTime @updatedAt
+
+  realtor_id                    Int
+  realtor                       User @relation(fields: [realtor_id], references: [id])
+
+
+}
+
+
